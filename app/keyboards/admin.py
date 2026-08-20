@@ -20,5 +20,11 @@ def new_ticket_keyboard(ticket_id: int) -> InlineKeyboardMarkup:
                     callback_data=f"ticket:reject:{ticket_id}",
                 ),
             ],
+            [
+                InlineKeyboardButton(
+                    text="История",
+                    callback_data=f"ticket:history:{ticket_id}",
+                ),
+            ],
         ]
     )

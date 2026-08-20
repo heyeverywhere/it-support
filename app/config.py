@@ -6,6 +6,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     bot_token: str = Field(default="", validation_alias="BOT_TOKEN")
+    sql_echo: bool = Field(
+        default=False,
+        validation_alias="SQL_ECHO",
+    )
     database_url: str = Field(
         default="sqlite+aiosqlite:///./it_support.db",
         validation_alias="DATABASE_URL",
