@@ -13,6 +13,7 @@ from aiogram.types import Message
 
 from app.config import settings
 from app.handlers.user import router as user_router
+from app.handlers.admin import router as admin_router
 from app.keyboards.user import main_menu_keyboard
 
 router = Router()
@@ -65,7 +66,9 @@ async def main() -> None:
 
     dispatcher = Dispatcher()
     dispatcher.include_router(user_router)
+    dispatcher.include_router(admin_router)
     dispatcher.include_router(router)
+
 
     try:
         logging.info("Бот запускается...")

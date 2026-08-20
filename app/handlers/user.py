@@ -1,7 +1,9 @@
+from aiogram import Bot
 from aiogram.filters import Command
 from app.services.tickets import create_ticket, get_user_tickets
 from app.database.session import AsyncSessionLocal
 from app.services.tickets import create_ticket
+from app.services.notifications import notify_admins_about_new_ticket
 from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -208,6 +210,7 @@ async def process_priority(
 async def confirm_ticket(
     message: Message,
     state: FSMContext,
+    bot: Bot,
 ) -> None:
     if message.from_user is None:
         await message.answer(
@@ -228,6 +231,11 @@ async def confirm_ticket(
             priority=data["priority"],
         )
 
+    await notify_admins_about_new_ticket(
+        bot=bot,
+        ticket=ticket,
+    )
+
     await state.clear()
 
     await message.answer(
@@ -235,7 +243,6 @@ async def confirm_ticket(
         "Администратор получил информацию и рассмотрит её.",
         reply_markup=main_menu_keyboard(),
     )
-
 
 @router.message(TicketForm.confirmation, F.text == "Изменить")
 async def edit_ticket(
